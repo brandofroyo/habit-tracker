@@ -1,0 +1,180 @@
+<!-- If User not created, show User Creation Modal -->
+<% if (userCreated === false) { %>
+<script type="text/javascript">
+    jQuery(window).on('load', function () {
+        jQuery('#userCreationModal').modal('show');
+    });
+</script>
+<% } %>
+
+<script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+          'use strict';
+          window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+              form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+              }, false);
+            });
+          }, false);
+        })();
+</script>
+
+<!-- User Creation Modal -->
+<div id="userCreationModal" class="modal show" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Welcome</h4>
+            </div>
+                <!-- Start of Form -->
+                <form class="needs-validation" action="/charCreate" method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="TaskTitle">Please enter your name</label>
+                            <input type="text" class="form-control"  name="charName" id="CharName" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                            <input type="submit" value="Save" class="btn btn-dark btn-lg">
+                    </div>
+                </form>
+                <!-- End of Form -->  
+        </div>
+    </div>
+</div>
+
+<div>
+    <h1 class="d-inline-block align-middle">Tasks</h1>
+
+    <!-- + Button to add task -->
+    <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+        data-target="#addTaskModal">Add Task
+    </button>
+</div>
+
+<!-- Add Task Modal-->
+<div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTaskModalLabel">Create New Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Start of Form -->
+            <form class="needs-validation" action="/" method="POST">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="TaskTitle">Task Title</label>
+                        <input type="text" class="form-control" name="taskTitle" id="TaskTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="TaskDescription">Task Description</label>
+                        <textarea class="form-control" id="TaskDescription" name="taskDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="TaskEXP">Task EXP Amount</label>
+                        <select class="form-control" id="exampleFormControlSelect1" name="taskEXP">
+                          <option>10</option>
+                          <option>20</option>
+                          <option>30</option>
+                          <option>40</option>
+                          <option>50</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Reward">Reward Title</label>
+                        <input type="text" class="form-control" name="taskRewardTitle" id="reward" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="RewardDescription">Reward Description</label>
+                        <textarea class="form-control" id="RewardDescription" name="taskRewardDescription" rows="3"></textarea>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="TaskDueDate">Due Date</label>
+                                <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                                    <input type="text" name="taskDueDate" class="form-control datetimepicker-input" data-target="#datetimepicker4" required/>
+                                    <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <script type="text/javascript">
+                                $(function () {
+                                    $('#datetimepicker4').datetimepicker({
+                                        format: 'L'
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Cancel</button>
+                        <input type="submit" value="Add Task" class="btn btn-dark btn-lg">
+                </div>
+            </form>
+            <!-- End of Form -->  
+        </div>
+    </div>
+</div>
+<!-- End of Add Task Modal -->
+
+<!-- Start of Tasks Due Today List -->
+<% include partials/_TasksDueTodayList.html %>
+<!-- End of Tasks Due Today List List -->
+
+<!-- Start of Tasks Due Next 3 Days List -->
+<% include partials/_TasksDueNextThreeDaysList.html %>
+<!-- End of Tasks Due Next 3 Days List -->
+
+<!-- Start of All Other Tasks List -->
+<% include partials/_TasksDueOtherList.html %>
+<!-- End of All Other Tasks Days List -->
+
+<script type="text/javascript">
+    $.fn.setClass = function(classes) {
+        this.attr('class', classes);
+        return this;
+    };
+
+    jQuery(document).ready( function() {
+        $(".card .card .card-body .row .col-8 .card-subtitle").each(function() {
+            var expValue = $(this).attr('exp')
+
+            if (expValue == 50) {
+                $(this).parent().parent().parent().parent().addClass("border-red");
+                $(this).parent().parent().parent().addClass("bg-red text-white");
+            } else if (expValue == 40) {
+                $(this).parent().parent().parent().parent().addClass("border-yellow");
+                $(this).parent().parent().parent().addClass("bg-yellow text-white");
+            } else if (expValue == 30) {
+                $(this).parent().parent().parent().parent().addClass("border-blue");
+                $(this).parent().parent().parent().addClass("bg-blue text-white");
+            } else if (expValue == 20) {
+                $(this).parent().parent().parent().parent().addClass("border-green");
+                $(this).parent().parent().parent().addClass("bg-green text-white");
+            } else {
+                $(this).parent().parent().parent().parent().addClass("border-dark");
+                $(this).parent().parent().parent().addClass("bg-dark text-white");
+            }
+        });
+    } );
+
+</script>
